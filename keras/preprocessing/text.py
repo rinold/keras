@@ -34,7 +34,14 @@ def text_to_word_sequence(text,
     """
     if lower:
         text = text.lower()
-    text = text.translate(maketrans(filters, split * len(filters)))
+    
+    try:
+        text = unicode(text, "utf-8")
+    except TypeError:
+        pass
+    translate_table = {ord(c): ord(t) for c,t in  zip(filters, split*len(filters)) }
+    text = text.translate(translate_table)
+    
     seq = text.split(split)
     return [i for i in seq if i]
 
